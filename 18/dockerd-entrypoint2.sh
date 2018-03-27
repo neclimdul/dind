@@ -1,10 +1,18 @@
 #!/bin/sh
 
-# Wait a tick after startup for docker to create the bridge and then fix the docker bridge MTU.
-# This might be a bit error prone and a loop checking bridge existence might work better but has its own flaws. Name process mgmt and dockerd-entrypoint2.sh failure.
+FIX_TRIES=0
 fix_mtu() {
-  sleep 2
-  echo "MTU: $DOCKER_MTU"
+  # Wait a tick for docker to create the bridge.
+  usleep 250
+  # Did it succeed and we can fix it?
+  echo "Testing bridge existance"
+  if [ `grep -q docker /proc/net/dev` ]; then
+    echo "MTU: $DOCKER_MTU"
+  else
+    # 5 seconds(4t/1s X 5s = 20t) to keep checking before giving up.
+    FIX_TRIES="$((FIX_TRIES + 1))"
+    [ "$FIX_TRIES" -lt 20 ] && fix_mtu
+  fi
 }
 fix_mtu&
 
