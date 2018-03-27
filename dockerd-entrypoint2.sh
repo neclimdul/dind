@@ -6,7 +6,7 @@ fix_mtu() {
   usleep 250000
   # Did it succeed and we can fix it?
   if grep -q docker /proc/net/dev; then
-    echo "MTU: $DOCKER_MTU"
+    ip link set dev docker0 mtu $DOCKER_MTU
   else
     # 5 seconds(4t/1s X 5s = 20t) to keep checking before giving up.
     FIX_TRIES="$((FIX_TRIES + 1))"
