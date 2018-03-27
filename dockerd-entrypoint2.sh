@@ -5,7 +5,6 @@ fix_mtu() {
   # Wait a tick for docker to create the bridge.
   usleep 250000
   # Did it succeed and we can fix it?
-  echo "Testing bridge existance"
   if grep -q docker /proc/net/dev; then
     echo "MTU: $DOCKER_MTU"
   else
