@@ -15,4 +15,4 @@ fix_mtu() {
 }
 fix_mtu&
 
-source dockerd-entrypoint.sh
+source dockerd-entrypoint.sh --mtu=$DOCKER_MTU
