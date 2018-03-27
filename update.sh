@@ -7,4 +7,5 @@ for version in "17" "18"; do
     -e 's!%%VERSION%%!'"$version"'!g' \
     "$template" > "$df"
   cp dockerd-entrypoint2.sh $version/
+  chmod a+x $version/dockerd-entrypoint2.sh
 done
